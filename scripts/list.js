@@ -114,14 +114,19 @@ let API_KEY = '';
 async function fetchConfig() {
     try {
         const response = await fetch('http://localhost:3000/config');
-        const config = await response.json();
-        SPREADSHEET_ID = config.spreadsheetId;
-        API_KEY = config.apiKey;
-        fetchDataFromGoogleSheets();
+        const data = await response.json();
+
+        console.log('API Key:', data.apiKey);
+        console.log('Spreadsheet ID:', data.spreadsheetId);
+
+        // Now you can use these values in your script
     } catch (error) {
         console.error('Error fetching config:', error);
     }
 }
+
+fetchConfig();
+
 
 async function fetchDataFromGoogleSheets() {
     const cachedData = localStorage.getItem(CACHE_KEY);
