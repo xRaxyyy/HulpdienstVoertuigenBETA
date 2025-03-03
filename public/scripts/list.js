@@ -362,7 +362,7 @@ function debounce(func, wait) {
 const debouncedUpdateInfoGroupHeight = debounce(updateInfoGroupHeight, 100);
 
 function updateInfoGroupHeight() {
-    console.log('Updating info group heights...');
+    // console.log('Updating info group heights...');
     const infoGroups = document.querySelectorAll('.info-group');
     infoGroups.forEach(infoGroup => {
         const infoBox = infoGroup.querySelector('.info-box');
@@ -434,7 +434,7 @@ function generateVisibleRows(dataset, amount, shouldClear = false) {
                 j++;
             }
 
-            console.log(j);
+            // console.log(j);
 
             offset = j; // Update global offset
             i = j - 1;
@@ -556,7 +556,7 @@ window.addEventListener('scroll', () => {
             !allRowsRendered &&
             filteredData.length > offset
         ) {
-            console.log('Scroll: ', count, offset); // Debugging log
+            // console.log('Scroll: ', count, offset); 
             generateVisibleRows(filteredData, count, false);
         }
         isScrollting = false;
