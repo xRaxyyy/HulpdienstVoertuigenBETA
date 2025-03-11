@@ -36,8 +36,6 @@ html, body {
     font-family: 'Nunito', Arial, sans-serif;
 }
 
-<<<<<<< HEAD
-=======
 body {
     overflow: hidden;
     margin: 0;
@@ -104,7 +102,6 @@ body {
 }
 
 
->>>>>>> 68db654 (Initial commit)
 #showbox-holder {
     position: fixed;
     z-index: 9999;
@@ -1039,40 +1036,22 @@ transform: translateY(-2px);
     transform: rotate(180deg);
 }
 
-<<<<<<< HEAD
-.dropdown-menu {
-=======
 .dropdown-wrapper {
->>>>>>> 68db654 (Initial commit)
     position: absolute;
     top: 100%;
     left: 0;
     width: 100%;
-<<<<<<< HEAD
-    max-height: 200px;
-    overflow-y: auto;
-    background: linear-gradient(135deg, rgba(50, 50, 50, 0.95), rgba(30, 30, 30, 0.95));
-    border-radius: 12px 0px 0px 12px;
-    margin-top: 5px;
-    padding: 10px 0;
-=======
     max-height: 215px; /* Maximum height for the dropdown */
     background: linear-gradient(135deg, rgba(50, 50, 50, 0.95), rgba(30, 30, 30, 0.95));
     border-radius: 12px 0px 0px 12px;
     margin-top: 5px;
     padding: 0; /* Remove padding from the wrapper */
->>>>>>> 68db654 (Initial commit)
     list-style: none;
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
     transform: translateY(-10px);
     z-index: 10;
-<<<<<<< HEAD
-}
-
-.dropdown-menu.active {
-=======
     overflow: hidden; /* Ensure the wrapper itself does not scroll */
 }
 
@@ -1083,18 +1062,13 @@ transform: translateY(-2px);
 }
 
 .dropdown-wrapper.active {
->>>>>>> 68db654 (Initial commit)
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
     z-index: 100;
 }
 
-<<<<<<< HEAD
-.dropdown-menu li {
-=======
 .dropdown-wrapper li {
->>>>>>> 68db654 (Initial commit)
     padding: 10px;
     color: white;
     font-size: 14px;
@@ -1102,11 +1076,7 @@ transform: translateY(-2px);
     transition: background 0.3s ease;
 }
 
-<<<<<<< HEAD
-.dropdown-menu li:hover {
-=======
 .dropdown-wrapper li:hover {
->>>>>>> 68db654 (Initial commit)
     background: rgba(255, 255, 255, 0.1);
 }
 
@@ -1349,7 +1319,6 @@ transform: translateY(-2px);
 
 
 
-<<<<<<< HEAD
 ::-webkit-scrollbar {
     height: 7.5px; 
     width: 7.5px;
@@ -1372,10 +1341,6 @@ transform: translateY(-2px);
     background-color: transparent; 
 }
 
-=======
-
-
->>>>>>> 68db654 (Initial commit)
 
 
 
@@ -1487,18 +1452,13 @@ transform: translateY(-2px);
     transition: scale 0.3s ease, background 0.3s ease;
     will-change: contents;
     user-select: none;
-<<<<<<< HEAD
-=======
     margin-top: 20px;
->>>>>>> 68db654 (Initial commit)
 }
 .contact-form button:hover {
     background: linear-gradient(135deg, rgba(45, 125, 246, 1), rgba(26, 91, 191, 1));
     scale: 1.02;
 }
 
-<<<<<<< HEAD
-=======
 .contact-form .privacy-note h1{
     margin-top: 10px;
     text-align: center;
@@ -1517,7 +1477,6 @@ transform: translateY(-2px);
     color: rgba(45, 125, 246, 1);
 }
 
->>>>>>> 68db654 (Initial commit)
 .contact-form .error {
     color: red;
     font-size: 12px;
@@ -1569,8 +1528,6 @@ transform: translateY(-2px);
     transform: translateX(0); /* Move to its final position */
 }
 
-<<<<<<< HEAD
-=======
 .popup {
     display: flex;
     position: fixed;
@@ -1699,7 +1656,6 @@ transform: translateY(-2px);
 .custom-scrollbar-popup .scrollbar-thumb:active {
     background-color: var(--accent-color);
 }
->>>>>>> 68db654 (Initial commit)
 
 @media (max-width: 1100px) {
     #home-info {

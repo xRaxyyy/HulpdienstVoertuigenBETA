@@ -18,7 +18,7 @@ const NLDropdown = {
         { value: "KMAR/Douane", text: "KMAR/Douane" },
         { value: "Rijksrederij", text: "Rijksrederij" },
     ],
-  
+
     RegioDropdown: [
         { value: "all", text: "Alle Regio's" },
         { value: "1", text: "1 - Groningen (HVDG)" },
@@ -52,9 +52,9 @@ const NLDropdown = {
         { value: "ON", text: "ON - Oost-Nederland (RWS)" },
         { value: "MN", text: "MN - Midden-Nederland (RWS)" },
         { value: "WNN", text: "WNN - West-Nederland-Noord (RWS)" },
-        { value: "WNZ", text: "WNZ - West-Nederland-Zuid (RWS)" }, 
+        { value: "WNZ", text: "WNZ - West-Nederland-Zuid (RWS)" },
         { value: "ZD", text: "ZD - Zee en Delta (RWS)" },
-        { value: "ZN", text: "ZN - Zuid-Nederland (RWS)" }, 
+        { value: "ZN", text: "ZN - Zuid-Nederland (RWS)" },
         { value: "NN", text: "NN - Noord-Nederland (Politie)" },
         { value: "ON", text: "ON - Oost-Nederland (Politie)" },
         { value: "MD", text: "MD - Midden-Nederland (Politie)" },
@@ -64,11 +64,11 @@ const NLDropdown = {
         { value: "RT", text: "RT - Rotterdam (Politie)" },
         { value: "ZB", text: "ZB - Zuid-Brabant (Politie)" },
         { value: "OB", text: "OB - Oost-Brabant (Politie)" },
-        { value: "LB", text: "LB - Limburg (Politie)" }, 
-    ]
-  };
-  
-  const BEDropdown = {
+        { value: "LB", text: "LB - Limburg (Politie)" },
+    ],
+};
+
+const BEDropdown = {
     HulpdienstDropdown: [
         { value: "all", text: "Alle Hulpdiensten" },
         { value: "Politie", text: "Politie" },
@@ -80,7 +80,7 @@ const NLDropdown = {
         { value: "Academies", text: "Academies" },
         { value: "Meldkamers", text: "Meldkamers" },
     ],
-  
+
     RegioDropdown: [
         { value: "all", text: "Alle Regio's" },
         { value: "Antwerpen", text: "Antwerpen" },
@@ -93,18 +93,15 @@ const NLDropdown = {
         { value: "Luik", text: "Luik" },
         { value: "Luxemburg", text: "Luxemburg" },
         { value: "Waals-Brabant", text: "Waals-Brabant" },
-        { value: "Namen", text: "Namen"},
-    ]
-  };
-  
+        { value: "Namen", text: "Namen" },
+    ],
+};
+
 const table = document.getElementById('list_table');
 const input = document.getElementById('search-input');
 const hulpdienstDropdown = document.getElementById('hulpdienst-dropdown');
 const regioDropdown = document.getElementById('regio-dropdown');
-<<<<<<< HEAD
-=======
 const scrollableContent = document.querySelector('.scroll-content');
->>>>>>> 68db654 (Initial commit)
 
 let count = 100;
 let preprocessedDataset = [];
@@ -113,66 +110,48 @@ let offset = 0;
 let isScrollting = false;
 let scrollTimeout;
 let allRowsRendered = false;
-  
-  function convertSheetDataToJSON(sheetData) {
-      const headers = sheetData[2]; 
-      const rows = sheetData.slice(3); 
-  
-      return rows.map(row => {
+
+function convertSheetDataToJSON(sheetData) {
+    const headers = sheetData[2];
+    const rows = sheetData.slice(3);
+
+    return rows.map((row) => {
         const obj = {};
         headers.forEach((header, index) => {
-          obj[header] = row[index] ? row[index].trim() : ''; 
+            obj[header] = row[index] ? row[index].trim() : '';
         });
         return obj;
-      });
-  }
-  
-  function preprocessDataset(dataset) {
-      return dataset.map((row) => {
+    });
+}
+
+function preprocessDataset(dataset) {
+    return dataset.map((row) => {
         const searchField = [
-          row.Adres,
-          row.Roepnummer,
-          row.Afkorting,
-          row.TypeVoertuig, 
-          row.Kenteken,
-          row.Bijzonderheden,
-          row.Hulpdienst,
-          row.Regio,
-        ].map(field => (field ? field.toLowerCase() : '')).join(' ');
-  
+            row.Adres,
+            row.Roepnummer,
+            row.Afkorting,
+            row.TypeVoertuig,
+            row.Kenteken,
+            row.Bijzonderheden,
+            row.Hulpdienst,
+            row.Regio,
+        ]
+            .map((field) => (field ? field.toLowerCase() : ''))
+            .join(' ');
+
         return {
-          ...row,
-          _searchField: searchField,
+            ...row,
+            _searchField: searchField,
         };
-      });
-  }
-  
-<<<<<<< HEAD
-  function populateDropdown(dropdownButton, dropdownData) {
-      const dropdownMenu = dropdownButton.nextElementSibling;
-      dropdownMenu.innerHTML = '';
-  
-      dropdownData.forEach((item) => {
-          const li = document.createElement('li');
-          li.setAttribute('value', item.value);
-          li.textContent = item.text;
-          dropdownMenu.appendChild(li);
-      });
-  }
-  
-function filterRegioDropdown(hulpdienstValue) {
-    const regioDropdownButton = document.getElementById('regio-dropdown');
-    const regioDropdownMenu = regioDropdownButton.nextElementSibling;
-=======
+    });
+}
 
 function populateDropdown(dropdownButton, dropdownData) {
-    const dropdownMenuWrapper = dropdownButton.nextElementSibling; // Get the dropdown wrapper
-    const dropdownMenu = dropdownMenuWrapper.querySelector('.dropdown-menu'); // Get the dropdown menu (ul)
+    const dropdownMenuWrapper = dropdownButton.nextElementSibling;
+    const dropdownMenu = dropdownMenuWrapper.querySelector('.dropdown-menu');
 
-    // Clear only the dropdown menu items, not the entire wrapper
     dropdownMenu.innerHTML = '';
 
-    // Populate the dropdown menu with new items
     dropdownData.forEach((item) => {
         const li = document.createElement('li');
         li.setAttribute('value', item.value);
@@ -180,80 +159,50 @@ function populateDropdown(dropdownButton, dropdownData) {
         dropdownMenu.appendChild(li);
     });
 
-    // Reinitialize the dropdown after populating it
-    initializeCustomDropdown(dropdownButton, updAndClear);
+    initializeCustomDropdown(dropdownButton, debouncedUpdateList);
 }
 
 function filterRegioDropdown(hulpdienstValue) {
     const regioDropdownButton = document.getElementById('regio-dropdown');
     const regioDropdownMenu = regioDropdownButton.nextElementSibling.querySelector('.dropdown-menu');
->>>>>>> 68db654 (Initial commit)
     regioDropdownMenu.innerHTML = '';
 
     const dropdownData = window.location.search.includes('NL') ? NLDropdown : BEDropdown;
 
     let filteredRegions = [];
 
-    // Check if the URL includes 'NL'
     const includesNL = window.location.search.includes('NL');
 
     if (hulpdienstValue === 'all') {
         filteredRegions = dropdownData.RegioDropdown;
-<<<<<<< HEAD
-
-=======
->>>>>>> 68db654 (Initial commit)
         regioDropdownButton.innerHTML = `Alle Regio's <i class="fa fa-chevron-down"></i>`;
         regioDropdownButton.setAttribute('data-value', 'all');
     } else if (hulpdienstValue === 'Politie' && includesNL) {
-        // Only filter for Politie if the URL includes 'NL'
         filteredRegions = dropdownData.RegioDropdown.filter(
-            region => region.value === 'all' || region.text.includes('(Politie)')
+            (region) => region.value === 'all' || region.text.includes('(Politie)')
         );
-<<<<<<< HEAD
-=======
         regioDropdownButton.innerHTML = `Alle Regio's <i class="fa fa-chevron-down"></i>`;
         regioDropdownButton.setAttribute('data-value', 'all');
->>>>>>> 68db654 (Initial commit)
     } else if ((hulpdienstValue === 'Rijkswaterstaat' || hulpdienstValue === 'Weginspecteurs') && includesNL) {
-        // Only filter for Rijkswaterstaat or Weginspecteurs if the URL includes 'NL'
         filteredRegions = dropdownData.RegioDropdown.filter(
-            region => region.value === 'all' || region.text.includes('(RWS)')
+            (region) => region.value === 'all' || region.text.includes('(RWS)')
         );
-<<<<<<< HEAD
-=======
         regioDropdownButton.innerHTML = `Alle Regio's <i class="fa fa-chevron-down"></i>`;
         regioDropdownButton.setAttribute('data-value', 'all');
->>>>>>> 68db654 (Initial commit)
     } else {
-        // Default filter for other cases
         filteredRegions = dropdownData.RegioDropdown.filter(
-            region => !region.text.includes('(Politie)') && !region.text.includes('(RWS)')
+            (region) => !region.text.includes('(Politie)') && !region.text.includes('(RWS)')
         );
-<<<<<<< HEAD
-    }
-
-    populateDropdown(regioDropdownButton, filteredRegions);
-
-    initializeCustomDropdown(regioDropdownButton, updAndClear);
-
-    if (hulpdienstValue !== 'Politie' && hulpdienstValue !== 'Rijkswaterstaat' && hulpdienstValue !== 'Weginspecteurs') {
-        regioDropdownButton.innerHTML = `Alle Regio's <i class="fa fa-chevron-down"></i>`;
-        regioDropdownButton.setAttribute('data-value', 'all');
-    }
-=======
         regioDropdownButton.innerHTML = `Alle Regio's <i class="fa fa-chevron-down"></i>`;
         regioDropdownButton.setAttribute('data-value', 'all');
     }
 
     populateDropdown(regioDropdownButton, filteredRegions);
->>>>>>> 68db654 (Initial commit)
 }
 
 function updateHulpdienstDropdown(regioValue) {
     const hulpdienstDropdownButton = document.getElementById('hulpdienst-dropdown');
 
-    // Check if the URL includes 'NL'
     const includesNL = window.location.search.includes('NL');
 
     if (regioValue && regioValue.includes('(Politie)') && includesNL) {
@@ -264,51 +213,6 @@ function updateHulpdienstDropdown(regioValue) {
         hulpdienstDropdownButton.innerHTML = `Rijkswaterstaat <i class="fa fa-chevron-down"></i>`;
         hulpdienstDropdownButton.setAttribute('data-value', 'Rijkswaterstaat');
         filterRegioDropdown('Rijkswaterstaat');
-<<<<<<< HEAD
-    }
-}
-  
-  function initializeCustomDropdown(dropdownButton, callback) {
-      const dropdownMenu = dropdownButton.nextElementSibling;
-      const dropdownItems = dropdownMenu.querySelectorAll('li');
-  
-      dropdownButton.addEventListener('click', () => {
-          dropdownMenu.classList.toggle('visible');
-      });
-  
-      dropdownItems.forEach((item) => {
-          item.addEventListener('click', () => {
-              const searchInput = document.getElementById('search-input');
-  
-              if (searchInput) {
-                  searchInput.value = ''; 
-              }
-  
-              dropdownButton.innerHTML = `${item.textContent} <i class="fa fa-chevron-down"></i>`;
-              dropdownButton.setAttribute('data-value', item.getAttribute('value'));
-  
-              dropdownMenu.classList.remove('visible');
-  
-              if (dropdownButton.id === 'regio-dropdown') {
-                  updateHulpdienstDropdown(item.textContent);
-              }
-  
-              if (dropdownButton.id === 'hulpdienst-dropdown') {
-                  const hulpdienstValue = item.getAttribute('value');
-                  filterRegioDropdown(hulpdienstValue); 
-              }
-  
-              callback();
-          });
-      });
-  
-      document.addEventListener('click', (e) => {
-          if (!dropdownButton.contains(e.target) && !dropdownMenu.contains(e.target)) {
-              dropdownMenu.classList.remove('visible');
-          }
-      });
-  }
-=======
     } else {
         hulpdienstDropdownButton.innerHTML = `Alle Hulpdiensten <i class="fa fa-chevron-down"></i>`;
         hulpdienstDropdownButton.setAttribute('data-value', 'all');
@@ -329,7 +233,7 @@ function initializeCustomDropdown(dropdownButton, callback) {
             const searchInput = document.getElementById('search-input');
 
             if (searchInput) {
-                searchInput.value = ''; 
+                searchInput.value = '';
             }
 
             dropdownButton.innerHTML = `${item.textContent} <i class="fa fa-chevron-down"></i>`;
@@ -343,7 +247,7 @@ function initializeCustomDropdown(dropdownButton, callback) {
 
             if (dropdownButton.id === 'hulpdienst-dropdown') {
                 const hulpdienstValue = item.getAttribute('value');
-                filterRegioDropdown(hulpdienstValue); 
+                filterRegioDropdown(hulpdienstValue);
             }
 
             callback();
@@ -357,70 +261,54 @@ function initializeCustomDropdown(dropdownButton, callback) {
     });
 }
 
+function filterAndSearchDataset(query, region, service, dataset) {
+    const lowerQuery = query.toLowerCase();
+    const filtered = [];
 
+    dataset.forEach((item, index, array) => {
+        const matchesRegion = region === 'all' || item.Regio === region;
+        const matchesService = service === 'all' || item.Hulpdienst === service;
 
+        const matchesSearch =
+            lowerQuery === '' ||
+            item._searchField.includes(lowerQuery) ||
+            item.TypeVoertuig.toLowerCase().includes(lowerQuery) ||
+            (item.Roepnummer && item.Roepnummer.toLowerCase().includes(lowerQuery));
 
+        if (item.TypeVoertuig === '' && item.Adres) {
+            let childIndex = index + 1;
+            let hasMatchingChild = false;
 
->>>>>>> 68db654 (Initial commit)
-  
-  
-  function filterAndSearchDataset(query, region, service, dataset) {
-      const lowerQuery = query.toLowerCase();
-      const filtered = [];
-  
-      dataset.forEach((item, index, array) => {
-          const matchesRegion = region === 'all' || item.Regio === region;
-          const matchesService = service === 'all' || item.Hulpdienst === service;
-  
-          const matchesSearch =
-              lowerQuery === '' ||
-              item._searchField.includes(lowerQuery) ||
-              item.TypeVoertuig.toLowerCase().includes(lowerQuery) ||
-              (item.Roepnummer && item.Roepnummer.toLowerCase().includes(lowerQuery)); 
-  
-          if (item.TypeVoertuig === '' && item.Adres) {
-              let childIndex = index + 1;
-              let hasMatchingChild = false;
-  
-              while (
-                  childIndex < array.length &&
-                  array[childIndex].TypeVoertuig !== ''
-              ) {
-                  const childRow = array[childIndex];
-                  const childMatchesSearch =
-                      childRow._searchField.includes(lowerQuery) ||
-                      childRow.TypeVoertuig.toLowerCase().includes(lowerQuery) ||
-                      (childRow.Roepnummer && childRow.Roepnummer.toLowerCase().includes(lowerQuery)); 
-  
-                  if (childMatchesSearch) {
-                      hasMatchingChild = true;
-                      break; 
-                  }
-                  childIndex++;
-              }
-  
-              if (
-                  matchesRegion &&
-                  matchesService &&
-                  (hasMatchingChild || 
-                   (lowerQuery === '' || item.Adres.toLowerCase().includes(lowerQuery)))
-              ) {
-                  filtered.push(item);
-              }
-          } else if (matchesRegion && matchesService && matchesSearch) {
-              filtered.push(item);
-          }
-      });
-  
-      return filtered;
-  }
-  
-<<<<<<< HEAD
-  function updateList(shouldClear = true) {
-=======
+            while (childIndex < array.length && array[childIndex].TypeVoertuig !== '') {
+                const childRow = array[childIndex];
+                const childMatchesSearch =
+                    childRow._searchField.includes(lowerQuery) ||
+                    childRow.TypeVoertuig.toLowerCase().includes(lowerQuery) ||
+                    (childRow.Roepnummer && childRow.Roepnummer.toLowerCase().includes(lowerQuery));
+
+                if (childMatchesSearch) {
+                    hasMatchingChild = true;
+                    break;
+                }
+                childIndex++;
+            }
+
+            if (
+                matchesRegion &&
+                matchesService &&
+                (hasMatchingChild || lowerQuery === '' || item.Adres.toLowerCase().includes(lowerQuery))
+            ) {
+                filtered.push(item);
+            }
+        } else if (matchesRegion && matchesService && matchesSearch) {
+            filtered.push(item);
+        }
+    });
+
+    return filtered;
+}
 
 function updateList(shouldClear = true) {
->>>>>>> 68db654 (Initial commit)
     const query = input.value || '';
     const region = regioDropdown.getAttribute('data-value') || 'all';
     const service = hulpdienstDropdown.getAttribute('data-value') || 'all';
@@ -428,24 +316,18 @@ function updateList(shouldClear = true) {
     filteredData = filterAndSearchDataset(query, region, service, preprocessedDataset);
 
     if (shouldClear) {
-        offset = 0; // Reset offset when clearing the list
+        offset = 0;
         allRowsRendered = false;
     }
 
     const containersHolder = document.getElementById('containers-holder');
-<<<<<<< HEAD
-    containersHolder.innerHTML = ''; // Clear the container
-=======
 
-    // Clear the container only if shouldClear is true
     if (shouldClear) {
-        containersHolder.innerHTML = ''; // Clear the container
+        containersHolder.innerHTML = '';
     }
->>>>>>> 68db654 (Initial commit)
 
     if (filteredData.length === 0) {
         if (query === '') {
-            // No matches found when switching hulpdienst value
             const noMatchDiv = document.createElement('div');
             noMatchDiv.className = 'container';
             const header = document.createElement('div');
@@ -454,7 +336,6 @@ function updateList(shouldClear = true) {
             noMatchDiv.appendChild(header);
             containersHolder.appendChild(noMatchDiv);
         } else {
-            // No matches found when searching
             const noMatchDiv = document.createElement('div');
             noMatchDiv.textContent = 'Geen overeenkomsten gevonden.';
             noMatchDiv.style.textAlign = 'center';
@@ -463,17 +344,10 @@ function updateList(shouldClear = true) {
             containersHolder.appendChild(noMatchDiv);
         }
     } else {
-<<<<<<< HEAD
-        // console.log('Update List:', count, offset);
-        generateVisibleRows(filteredData, count, shouldClear); // No offset argument
-=======
-        generateVisibleRows(filteredData, count, shouldClear); // Pass shouldClear to generateVisibleRows
->>>>>>> 68db654 (Initial commit)
+        generateVisibleRows(filteredData, count, shouldClear);
     }
 }
 
-
-  
 function debounce(func, wait) {
     let timeout;
     return function (...args) {
@@ -482,37 +356,14 @@ function debounce(func, wait) {
     };
 }
 
-const debouncedUpdateInfoGroupHeight = debounce(updateInfoGroupHeight, 100);
-
-function updateInfoGroupHeight() {
-    // console.log('Updating info group heights...');
-    const infoGroups = document.querySelectorAll('.info-group');
-    infoGroups.forEach(infoGroup => {
-        const infoBox = infoGroup.querySelector('.info-box');
-        if (infoBox) {
-            let infoBoxHeight = infoBox.offsetHeight;
-
-            if (window.innerWidth < 350) {
-                infoBox.style.minHeight = `${MIN_INFO_BOX_HEIGHT}px`;
-                infoBoxHeight = Math.max(infoBoxHeight, MIN_INFO_BOX_HEIGHT);
-            } else {
-                infoBox.style.minHeight = '';
-            }
-
-            const newHeight = infoBoxHeight + 4;
-            infoGroup.style.height = `${newHeight}px`;
-        }
-    });
-}
+const debouncedUpdateList = debounce(updateList, 300);
 
 function generateVisibleRows(dataset, amount, shouldClear = false) {
     const containersHolder = document.getElementById('containers-holder');
 
-    // console.log('Generate Visible:', amount, offset); 
-
     if (shouldClear) {
         containersHolder.innerHTML = '';
-        offset = 0; // Reset the global offset
+        offset = 0;
     }
 
     if (dataset.length === 0) {
@@ -557,9 +408,7 @@ function generateVisibleRows(dataset, amount, shouldClear = false) {
                 j++;
             }
 
-            // console.log(j);
-
-            offset = j; // Update global offset
+            offset = j;
             i = j - 1;
         } else if (currentContainer && row.TypeVoertuig !== '') {
             const infoGroup = createInfoGroup(row);
@@ -576,11 +425,8 @@ function generateVisibleRows(dataset, amount, shouldClear = false) {
         allRowsRendered = true;
     }
 
-    // console.log("Set offset to: ", offset);
-
     debouncedUpdateInfoGroupHeight();
 }
-
 
 function createInfoGroup(row) {
     const infoGroup = document.createElement('div');
@@ -667,48 +513,25 @@ function createInfoGroup(row) {
 
     return infoGroup;
 }
-  
-<<<<<<< HEAD
-window.addEventListener('scroll', () => {
-=======
+
 scrollableContent.addEventListener('scroll', () => {
->>>>>>> 68db654 (Initial commit)
     if (isScrollting || allRowsRendered) return;
     isScrollting = true;
     clearTimeout(scrollTimeout);
 
     scrollTimeout = setTimeout(() => {
-<<<<<<< HEAD
-        if (
-            window.innerHeight + window.scrollY >= document.body.offsetHeight - 5 &&
-            !allRowsRendered &&
-            filteredData.length > offset
-        ) {
-            // console.log('Scroll: ', count, offset); 
-=======
-        // Check if the user has scrolled near the bottom of the .scroll-content element
         if (
             scrollableContent.scrollTop + scrollableContent.clientHeight >= scrollableContent.scrollHeight - 5 &&
             !allRowsRendered &&
             filteredData.length > offset
         ) {
-            console.log('Scroll: ', count, offset); // Debugging log
->>>>>>> 68db654 (Initial commit)
             generateVisibleRows(filteredData, count, false);
         }
         isScrollting = false;
     }, 200);
 });
 
-  
-updateList(true);
-  
-
-<<<<<<< HEAD
-  document.addEventListener("DOMContentLoaded", async function () {
-=======
-document.addEventListener("DOMContentLoaded", async function () {
->>>>>>> 68db654 (Initial commit)
+document.addEventListener('DOMContentLoaded', async function () {
     const urlParams = window.location.search.substring(1);
     const region = urlParams;
 
@@ -716,34 +539,28 @@ document.addEventListener("DOMContentLoaded", async function () {
     const jsonData = convertSheetDataToJSON(sheetData);
     preprocessedDataset = preprocessDataset(jsonData);
 
+    let dropdownData;
     if (region === 'NL') {
         dropdownData = NLDropdown;
         document.querySelector('a[href="../list.html?NL"]').style.color = 'var(--accent-color)';
     } else if (region === 'BE') {
-<<<<<<< HEAD
-        dropdownData = BEDropdown;;
-=======
         dropdownData = BEDropdown;
->>>>>>> 68db654 (Initial commit)
         document.querySelector('a[href="../list.html?BE"]').style.color = 'var(--accent-color)';
     }
 
     populateDropdown(hulpdienstDropdown, dropdownData.HulpdienstDropdown);
     populateDropdown(regioDropdown, dropdownData.RegioDropdown);
 
-    initializeCustomDropdown(hulpdienstDropdown, updateList);
-    initializeCustomDropdown(regioDropdown, updateList);
+    initializeCustomDropdown(hulpdienstDropdown, debouncedUpdateList);
+    initializeCustomDropdown(regioDropdown, debouncedUpdateList);
 
-<<<<<<< HEAD
-=======
-    // Set the dropdown value based on the stored alt text
-    const selectedDropdownValue = localStorage.getItem("selectedDropdownValue");
+    const selectedDropdownValue = localStorage.getItem('selectedDropdownValue');
     if (selectedDropdownValue) {
         const dropdownButton = document.getElementById('hulpdienst-dropdown');
         const dropdownMenu = dropdownButton.nextElementSibling.querySelector('.dropdown-menu');
         const dropdownItems = dropdownMenu.querySelectorAll('li');
 
-        dropdownItems.forEach(item => {
+        dropdownItems.forEach((item) => {
             if (item.getAttribute('value') === selectedDropdownValue) {
                 dropdownButton.innerHTML = `${item.textContent} <i class="fa fa-chevron-down"></i>`;
                 dropdownButton.setAttribute('data-value', item.getAttribute('value'));
@@ -751,26 +568,16 @@ document.addEventListener("DOMContentLoaded", async function () {
             }
         });
 
-        // Clear the stored value after setting the dropdown
-        localStorage.removeItem("selectedDropdownValue");
+        localStorage.removeItem('selectedDropdownValue');
     }
 
->>>>>>> 68db654 (Initial commit)
-    updateList(true);
+    debouncedUpdateList(true);
 
-    input.addEventListener('input', debounce(updateList, 300));
+    input.addEventListener('input', debouncedUpdateList);
 
     setTimeout(() => {
-<<<<<<< HEAD
-        let loader = document.querySelector('#showbox-holder');
-        if (loader) {
-            loader.classList.add('fade-out');
-            document.documentElement.style.overflow = '';
-
-=======
-        // Select the loader element
         const loader = document.querySelector('#showbox-holder');
-    
+
         if (loader) {
             loader.classList.add('fade-out');
 
@@ -779,8 +586,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             if (typeof window.updateScrollbar === 'function') {
                 window.updateScrollbar();
             }
-    
->>>>>>> 68db654 (Initial commit)
+
             setTimeout(() => {
                 if (loader) {
                     loader.style.display = 'none';
@@ -789,9 +595,29 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
     }, 250);
 });
-  
-  async function fetchDataFromGoogleSheets(region) {
-      const response = await fetch(`/fetch-sheet?region=${region}`);
-      const data = await response.json();
-      return data.values;
-  }
+
+async function fetchDataFromGoogleSheets(region) {
+    const response = await fetch(`/fetch-sheet?region=${region}`);
+    const data = await response.json();
+    return data.values;
+}
+
+function debouncedUpdateInfoGroupHeight() {
+    const infoGroups = document.querySelectorAll('.info-group');
+    infoGroups.forEach((infoGroup) => {
+        const infoBox = infoGroup.querySelector('.info-box');
+        if (infoBox) {
+            let infoBoxHeight = infoBox.offsetHeight;
+
+            if (window.innerWidth < 350) {
+                infoBox.style.minHeight = `${MIN_INFO_BOX_HEIGHT}px`;
+                infoBoxHeight = Math.max(infoBoxHeight, MIN_INFO_BOX_HEIGHT);
+            } else {
+                infoBox.style.minHeight = '';
+            }
+
+            const newHeight = infoBoxHeight + 4;
+            infoGroup.style.height = `${newHeight}px`;
+        }
+    });
+}

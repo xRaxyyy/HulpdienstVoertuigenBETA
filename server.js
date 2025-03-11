@@ -1,10 +1,6 @@
-<<<<<<< HEAD
-const express = require('express');
-=======
 require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
->>>>>>> 68db654 (Initial commit)
 const cors = require('cors');
 const fetch = require('node-fetch');
 const path = require('path');
@@ -17,11 +13,7 @@ const cache = new NodeCache({ stdTTL: 3600 }); // Cache data for 1 hour
 
 // Middleware
 app.use(cors());
-<<<<<<< HEAD
-app.use(express.json());
-=======
 app.use(bodyParser.json());
->>>>>>> 68db654 (Initial commit)
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Email configuration
