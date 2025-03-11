@@ -308,6 +308,7 @@
         function showPrivacyPopup() {
             if (privacyPopup) {
                 privacyPopup.classList.add('active');
+                allowClose = true; // Set allowClose to true when the popup is opened
                 updateScrollbar();
             }
         }

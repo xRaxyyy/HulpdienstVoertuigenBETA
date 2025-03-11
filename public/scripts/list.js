@@ -356,7 +356,7 @@ function debounce(func, wait) {
     };
 }
 
-const debouncedUpdateList = debounce(updateList, 300);
+const debouncedUpdateList = debounce(updateList, 50);
 
 function generateVisibleRows(dataset, amount, shouldClear = false) {
     const containersHolder = document.getElementById('containers-holder');

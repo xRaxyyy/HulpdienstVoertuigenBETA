@@ -1484,6 +1484,10 @@ transform: translateY(-2px);
     margin-bottom: 10px;
 }
 
+.contact-form .dropdown-wrapper {
+    border-radius: 12px;
+}
+
 #success-message {
     position: fixed;
     bottom: 10px;
