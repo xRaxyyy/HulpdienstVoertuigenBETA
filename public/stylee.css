@@ -36,6 +36,75 @@ html, body {
     font-family: 'Nunito', Arial, sans-serif;
 }
 
+<<<<<<< HEAD
+=======
+body {
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+}
+
+/* Scroll Container */
+.scroll-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Scroll Content */
+.scroll-content {
+    width: 100%;
+    height: 100%;
+    overflow-y: scroll;
+    scrollbar-width: none; /* For Firefox */
+}
+
+/* Hide default scrollbar in WebKit browsers */
+::-webkit-scrollbar {
+    display: none;
+}
+
+/* Custom Scrollbar */
+.custom-scrollbar {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 7px;
+    height: 100%;
+    background-color: transparent;
+    pointer-events: none;
+}
+
+/* Custom Scrollbar Body */
+.custom-scrollbar-body {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 7px; /* Width of the scrollbar */
+    height: 100%;
+    background-color: transparent;
+    pointer-events: none; /* Allow clicks to pass through */
+    z-index: 1000; /* Ensure it's above other content */
+}
+
+.scrollbar-thumb {
+    position: absolute;
+    width: 100%;
+    background-color: #555; /* Color of the scrollbar thumb */
+    border-radius: 5px; /* Rounded corners */
+    pointer-events: auto; /* Allow dragging */
+    z-index: 1001; /* Ensure it's above the scrollbar track */
+    transition: background-color 0.3s ease;
+}
+
+.scrollbar-thumb:hover,
+.scrollbar-thumb:active {
+    background-color: var(--accent-color);
+}
+
+
+>>>>>>> 68db654 (Initial commit)
 #showbox-holder {
     position: fixed;
     z-index: 9999;
@@ -970,33 +1039,62 @@ transform: translateY(-2px);
     transform: rotate(180deg);
 }
 
+<<<<<<< HEAD
 .dropdown-menu {
+=======
+.dropdown-wrapper {
+>>>>>>> 68db654 (Initial commit)
     position: absolute;
     top: 100%;
     left: 0;
     width: 100%;
+<<<<<<< HEAD
     max-height: 200px;
     overflow-y: auto;
     background: linear-gradient(135deg, rgba(50, 50, 50, 0.95), rgba(30, 30, 30, 0.95));
     border-radius: 12px 0px 0px 12px;
     margin-top: 5px;
     padding: 10px 0;
+=======
+    max-height: 215px; /* Maximum height for the dropdown */
+    background: linear-gradient(135deg, rgba(50, 50, 50, 0.95), rgba(30, 30, 30, 0.95));
+    border-radius: 12px 0px 0px 12px;
+    margin-top: 5px;
+    padding: 0; /* Remove padding from the wrapper */
+>>>>>>> 68db654 (Initial commit)
     list-style: none;
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
     transform: translateY(-10px);
     z-index: 10;
+<<<<<<< HEAD
 }
 
 .dropdown-menu.active {
+=======
+    overflow: hidden; /* Ensure the wrapper itself does not scroll */
+}
+
+.dropdown-wrapper .dropdown-menu {
+    max-height: 215px; /* Same as the wrapper's max-height */
+    overflow-y: auto; /* Enable scrolling inside the dropdown menu */
+    padding: 10px 0; /* Add padding to the dropdown menu */
+}
+
+.dropdown-wrapper.active {
+>>>>>>> 68db654 (Initial commit)
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
     z-index: 100;
 }
 
+<<<<<<< HEAD
 .dropdown-menu li {
+=======
+.dropdown-wrapper li {
+>>>>>>> 68db654 (Initial commit)
     padding: 10px;
     color: white;
     font-size: 14px;
@@ -1004,7 +1102,11 @@ transform: translateY(-2px);
     transition: background 0.3s ease;
 }
 
+<<<<<<< HEAD
 .dropdown-menu li:hover {
+=======
+.dropdown-wrapper li:hover {
+>>>>>>> 68db654 (Initial commit)
     background: rgba(255, 255, 255, 0.1);
 }
 
@@ -1247,6 +1349,7 @@ transform: translateY(-2px);
 
 
 
+<<<<<<< HEAD
 ::-webkit-scrollbar {
     height: 7.5px; 
     width: 7.5px;
@@ -1269,6 +1372,10 @@ transform: translateY(-2px);
     background-color: transparent; 
 }
 
+=======
+
+
+>>>>>>> 68db654 (Initial commit)
 
 
 
@@ -1380,12 +1487,37 @@ transform: translateY(-2px);
     transition: scale 0.3s ease, background 0.3s ease;
     will-change: contents;
     user-select: none;
+<<<<<<< HEAD
+=======
+    margin-top: 20px;
+>>>>>>> 68db654 (Initial commit)
 }
 .contact-form button:hover {
     background: linear-gradient(135deg, rgba(45, 125, 246, 1), rgba(26, 91, 191, 1));
     scale: 1.02;
 }
 
+<<<<<<< HEAD
+=======
+.contact-form .privacy-note h1{
+    margin-top: 10px;
+    text-align: center;
+    font-size: 14px;
+    color: var(--text-color4);
+}
+
+.contact-form .privacy-note h1 a { 
+    color: rgb(27, 100, 209);
+    text-decoration: underline;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.contact-form .privacy-note h1 a:hover {
+    color: rgba(45, 125, 246, 1);
+}
+
+>>>>>>> 68db654 (Initial commit)
 .contact-form .error {
     color: red;
     font-size: 12px;
@@ -1437,6 +1569,137 @@ transform: translateY(-2px);
     transform: translateX(0); /* Move to its final position */
 }
 
+<<<<<<< HEAD
+=======
+.popup {
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(10px);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.popup.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.popup-content {
+    background: linear-gradient(135deg, rgba(50, 50, 50, 0.95), rgba(30, 30, 30, 0.95));
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 600px;
+    width: 90%;
+    max-height: 62vh;
+    position: relative;
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    border: 1px solid #4b4b4b;
+    transform: scale(0.8); /* Initial scale for transition */
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.popup.active .popup-content {
+    transform: scale(1); /* Scale up when active */
+}
+
+.privacy-text {
+    max-height: calc(62vh - 100px);
+    overflow-y: auto;
+    padding-right: 20px;
+}
+
+.popup-content h2 {
+    margin-top: 0;
+    color: #fff;
+}
+
+.popup-content h3 {
+    margin-top: 20px;
+    color: var(--accent-color);
+}
+
+.popup-content h3:first-of-type {
+    margin-top: 0;
+}
+
+.popup-content p {
+    line-height: 1.6;
+    color: #e0e0e0;
+}
+
+.popup-content ul {
+    margin: 10px 0;
+    padding-left: 20px;
+}
+
+.popup-content ul li {
+    margin-bottom: 10px;
+    color: #e0e0e0;
+}
+
+.popup-content ul li a {
+    text-decoration: underline;
+    color: #e0e0e0;
+    transition: color 0.3s ease;
+}
+
+.popup-content ul li a:hover {
+    cursor: pointer;
+    color: var(--accent-color);
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #fff;
+    transition: color 0.3s ease;
+}
+
+.close:hover {
+    color: var(--accent-color);
+}
+
+.custom-scrollbar-popup {
+    position: absolute;
+    top: 0;
+    right: 19.5px;
+    width: 7px;
+    height: 100%;
+    background-color: transparent;
+    pointer-events: none;
+    z-index: 1000;
+}
+
+.custom-scrollbar-popup .scrollbar-thumb {
+    margin-top: 67px;
+    position: absolute;
+    width: 100%;
+    background-color: #555;
+    border-radius: 5px;
+    pointer-events: auto;
+    z-index: 1001;
+    transition: background-color 0.3s ease;
+}
+
+.custom-scrollbar-popup .scrollbar-thumb:hover,
+.custom-scrollbar-popup .scrollbar-thumb:active {
+    background-color: var(--accent-color);
+}
+>>>>>>> 68db654 (Initial commit)
 
 @media (max-width: 1100px) {
     #home-info {
