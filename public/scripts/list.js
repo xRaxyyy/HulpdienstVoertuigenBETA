@@ -147,9 +147,7 @@ function preprocessDataset(dataset) {
 }
 
 function populateDropdown(dropdownButton, dropdownData) {
-    const dropdownMenuWrapper = dropdownButton.nextElementSibling;
-    const dropdownMenu = dropdownMenuWrapper.querySelector('.dropdown-menu');
-
+    const dropdownMenu = dropdownButton.nextElementSibling.querySelector('.dropdown-menu');;
     dropdownMenu.innerHTML = '';
 
     dropdownData.forEach((item) => {
@@ -158,65 +156,59 @@ function populateDropdown(dropdownButton, dropdownData) {
         li.textContent = item.text;
         dropdownMenu.appendChild(li);
     });
-
-    initializeCustomDropdown(dropdownButton, debouncedUpdateList);
 }
 
 function filterRegioDropdown(hulpdienstValue) {
+
     const regioDropdownButton = document.getElementById('regio-dropdown');
     const regioDropdownMenu = regioDropdownButton.nextElementSibling.querySelector('.dropdown-menu');
-    regioDropdownMenu.innerHTML = '';
+    regioDropdownMenu.innerHTML = ''; // Clear existing options
 
+    // Reset region dropdown to "All"
+    regioDropdownButton.innerHTML = `Alle Regio's <i class="fa fa-chevron-down"></i>`;
+    regioDropdownButton.setAttribute('data-value', 'all');
+
+    // Determine which dropdown data to use based on the URL
     const dropdownData = window.location.search.includes('NL') ? NLDropdown : BEDropdown;
 
     let filteredRegions = [];
 
-    const includesNL = window.location.search.includes('NL');
-
     if (hulpdienstValue === 'all') {
         filteredRegions = dropdownData.RegioDropdown;
-        regioDropdownButton.innerHTML = `Alle Regio's <i class="fa fa-chevron-down"></i>`;
-        regioDropdownButton.setAttribute('data-value', 'all');
-    } else if (hulpdienstValue === 'Politie' && includesNL) {
+    } else if (hulpdienstValue === 'Politie') {
         filteredRegions = dropdownData.RegioDropdown.filter(
-            (region) => region.value === 'all' || region.text.includes('(Politie)')
+            region => region.value === 'all' || region.text.includes('(Politie)')
         );
-        regioDropdownButton.innerHTML = `Alle Regio's <i class="fa fa-chevron-down"></i>`;
-        regioDropdownButton.setAttribute('data-value', 'all');
-    } else if ((hulpdienstValue === 'Rijkswaterstaat' || hulpdienstValue === 'Weginspecteurs') && includesNL) {
+    } else if (hulpdienstValue === 'Rijkswaterstaat' || hulpdienstValue === 'Weginspecteurs') {
         filteredRegions = dropdownData.RegioDropdown.filter(
-            (region) => region.value === 'all' || region.text.includes('(RWS)')
+            region => region.value === 'all' || region.text.includes('(RWS)')
         );
-        regioDropdownButton.innerHTML = `Alle Regio's <i class="fa fa-chevron-down"></i>`;
-        regioDropdownButton.setAttribute('data-value', 'all');
     } else {
         filteredRegions = dropdownData.RegioDropdown.filter(
-            (region) => !region.text.includes('(Politie)') && !region.text.includes('(RWS)')
+            region => !region.text.includes('(Politie)') && !region.text.includes('(RWS)')
         );
-        regioDropdownButton.innerHTML = `Alle Regio's <i class="fa fa-chevron-down"></i>`;
-        regioDropdownButton.setAttribute('data-value', 'all');
     }
 
+    // Populate the dropdown with the filtered regions
     populateDropdown(regioDropdownButton, filteredRegions);
+
+    // Initialize the custom dropdown functionality
+    initializeCustomDropdown(regioDropdownButton, updAndClear);
 }
+
 
 function updateHulpdienstDropdown(regioValue) {
     const hulpdienstDropdownButton = document.getElementById('hulpdienst-dropdown');
 
-    const includesNL = window.location.search.includes('NL');
-
-    if (regioValue && regioValue.includes('(Politie)') && includesNL) {
+    if (regioValue && regioValue.includes('(Politie)')) {
         hulpdienstDropdownButton.innerHTML = `Politie <i class="fa fa-chevron-down"></i>`;
         hulpdienstDropdownButton.setAttribute('data-value', 'Politie');
-        filterRegioDropdown('Politie');
-    } else if (regioValue && regioValue.includes('(RWS)') && includesNL) {
+    } else if (regioValue && regioValue.includes('(RWS)')) {
         hulpdienstDropdownButton.innerHTML = `Rijkswaterstaat <i class="fa fa-chevron-down"></i>`;
         hulpdienstDropdownButton.setAttribute('data-value', 'Rijkswaterstaat');
-        filterRegioDropdown('Rijkswaterstaat');
     } else {
         hulpdienstDropdownButton.innerHTML = `Alle Hulpdiensten <i class="fa fa-chevron-down"></i>`;
         hulpdienstDropdownButton.setAttribute('data-value', 'all');
-        filterRegioDropdown('all');
     }
 }
 
@@ -233,20 +225,23 @@ function initializeCustomDropdown(dropdownButton, callback) {
             const searchInput = document.getElementById('search-input');
 
             if (searchInput) {
-                searchInput.value = '';
+                searchInput.value = ''; // Clear search input if present
             }
 
             dropdownButton.innerHTML = `${item.textContent} <i class="fa fa-chevron-down"></i>`;
             dropdownButton.setAttribute('data-value', item.getAttribute('value'));
 
+
             dropdownMenu.classList.remove('visible');
 
             if (dropdownButton.id === 'regio-dropdown') {
-                updateHulpdienstDropdown(item.textContent);
+                updateHulpdienstDropdown(item.textContent); // Update hulpdienst based on selected region
             }
 
             if (dropdownButton.id === 'hulpdienst-dropdown') {
                 const hulpdienstValue = item.getAttribute('value');
+
+                // Always trigger the region dropdown update
                 filterRegioDropdown(hulpdienstValue);
             }
 
@@ -261,6 +256,7 @@ function initializeCustomDropdown(dropdownButton, callback) {
     });
 }
 
+
 function filterAndSearchDataset(query, region, service, dataset) {
     const lowerQuery = query.toLowerCase();
     const filtered = [];
@@ -273,22 +269,25 @@ function filterAndSearchDataset(query, region, service, dataset) {
             lowerQuery === '' ||
             item._searchField.includes(lowerQuery) ||
             item.TypeVoertuig.toLowerCase().includes(lowerQuery) ||
-            (item.Roepnummer && item.Roepnummer.toLowerCase().includes(lowerQuery));
+            (item.Roepnummer && item.Roepnummer.toLowerCase().includes(lowerQuery)); 
 
         if (item.TypeVoertuig === '' && item.Adres) {
             let childIndex = index + 1;
             let hasMatchingChild = false;
 
-            while (childIndex < array.length && array[childIndex].TypeVoertuig !== '') {
+            while (
+                childIndex < array.length &&
+                array[childIndex].TypeVoertuig !== ''
+            ) {
                 const childRow = array[childIndex];
                 const childMatchesSearch =
                     childRow._searchField.includes(lowerQuery) ||
                     childRow.TypeVoertuig.toLowerCase().includes(lowerQuery) ||
-                    (childRow.Roepnummer && childRow.Roepnummer.toLowerCase().includes(lowerQuery));
+                    (childRow.Roepnummer && childRow.Roepnummer.toLowerCase().includes(lowerQuery)); // Added Roepnummer check for child rows
 
                 if (childMatchesSearch) {
                     hasMatchingChild = true;
-                    break;
+                    break; 
                 }
                 childIndex++;
             }
@@ -296,7 +295,8 @@ function filterAndSearchDataset(query, region, service, dataset) {
             if (
                 matchesRegion &&
                 matchesService &&
-                (hasMatchingChild || lowerQuery === '' || item.Adres.toLowerCase().includes(lowerQuery))
+                (hasMatchingChild || 
+                 (lowerQuery === '' || item.Adres.toLowerCase().includes(lowerQuery)))
             ) {
                 filtered.push(item);
             }
@@ -356,9 +356,12 @@ function debounce(func, wait) {
     };
 }
 
-const debouncedUpdateList = debounce(updateList, 50);
+const debouncedUpdateList = debounce(() => {
+    updateList();
+}, 50);
 
 function generateVisibleRows(dataset, amount, shouldClear = false) {
+    console.log(shouldClear)
     const containersHolder = document.getElementById('containers-holder');
 
     if (shouldClear) {
@@ -379,6 +382,10 @@ function generateVisibleRows(dataset, amount, shouldClear = false) {
     let currentAddress = '';
     let currentContainer = null;
     let renderedCount = 0;
+    
+    console.log('yes')
+
+    console.log(dataset.length)
 
     for (let i = offset; i < dataset.length; i++) {
         const row = dataset[i];

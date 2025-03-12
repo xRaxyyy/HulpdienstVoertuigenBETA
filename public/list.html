@@ -380,6 +380,14 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    // Function to reset scroll position to the top
+    function resetScrollPosition(menu) {
+        const dropdownMenu = menu.querySelector('.dropdown-menu');
+        if (dropdownMenu) {
+            dropdownMenu.scrollTop = 0; // Reset scroll position to the top
+        }
+    }
+
     // Add event listeners to dropdown buttons
     dropdownButtons.forEach(button => {
         button.addEventListener('click', function (e) {
@@ -393,6 +401,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 closeAllDropdowns();
                 menu.classList.add('active');
                 this.classList.add('active');
+                resetScrollPosition(menu); // Reset scroll position when dropdown is opened
             }
         });
     });
@@ -503,6 +512,6 @@ function initializeScrollbars() {
 
 function updAndClear() {
     count = 100;
-    updateList();
+    debouncedUpdateList(true);
 }
 </script>

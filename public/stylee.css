@@ -1876,3 +1876,26 @@ transform: translateY(-2px);
         padding: 1rem;
     }
 }
+
+@media (max-width: 1024px) { /* Adjust breakpoint as needed */
+    .scroll-content {
+        scrollbar-width: auto; /* Firefox default scrollbar */
+        overflow-y: auto; /* Show default scrollbar */
+    }
+
+    ::-webkit-scrollbar {
+        display: block; /* Show WebKit scrollbar */
+        width: 7px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: #555;
+        border-radius: 5px;
+    }
+
+    /* Hide custom scrollbar on small screens */
+    .custom-scrollbar,
+    .custom-scrollbar-body {
+        display: none;
+    }
+}
