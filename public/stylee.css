@@ -83,7 +83,7 @@ body {
     height: 100%;
     background-color: transparent;
     pointer-events: none; /* Allow clicks to pass through */
-    z-index: 1000; /* Ensure it's above other content */
+    z-index: 500; /* Ensure it's above other content */
 }
 
 .scrollbar-thumb {
@@ -92,7 +92,7 @@ body {
     background-color: #555; /* Color of the scrollbar thumb */
     border-radius: 5px; /* Rounded corners */
     pointer-events: auto; /* Allow dragging */
-    z-index: 1001; /* Ensure it's above the scrollbar track */
+    z-index: 501; /* Ensure it's above the scrollbar track */
     transition: background-color 0.3s ease, opacity 0.3s ease;
 }
 
@@ -125,8 +125,8 @@ body {
     z-index: 9999;
     top: 0;
     left: 0;
-    width: 100vw;
-    height: 100vh;
+    width: 100dvw;
+    height: 100dvh;
     display: flex;
     justify-content: center;
     align-items: center;
