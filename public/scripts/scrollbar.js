@@ -97,12 +97,32 @@ document.addEventListener('DOMContentLoaded', () => {
     scrollableContent.addEventListener('touchstart', (e) => {
         if (!isMobile) return;
 
+        // Check if the touch event is inside an active dropdown
+        const activeDropdown = document.querySelector('.dropdown-wrapper.active');
+        if (activeDropdown && activeDropdown.contains(e.target)) {
+            const dropdownMenu = activeDropdown.querySelector('.dropdown-menu');
+            // Allow scrolling if the dropdown menu is scrollable
+            if (dropdownMenu.scrollHeight > dropdownMenu.clientHeight) {
+                return; // Allow default behavior for scrollable dropdowns
+            }
+        }
+
         touchStartY = e.touches[0].clientY;
         scrollStartY = scrollableContent.scrollTop;
     });
 
     scrollableContent.addEventListener('touchmove', (e) => {
         if (!isMobile) return;
+
+        // Check if the touch event is inside an active dropdown
+        const activeDropdown = document.querySelector('.dropdown-wrapper.active');
+        if (activeDropdown && activeDropdown.contains(e.target)) {
+            const dropdownMenu = activeDropdown.querySelector('.dropdown-menu');
+            // Allow scrolling if the dropdown menu is scrollable
+            if (dropdownMenu.scrollHeight > dropdownMenu.clientHeight) {
+                return; // Allow default behavior for scrollable dropdowns
+            }
+        }
 
         const touchY = e.touches[0].clientY;
         const deltaY = touchY - touchStartY;

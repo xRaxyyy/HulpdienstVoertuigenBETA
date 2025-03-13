@@ -107,13 +107,13 @@ body {
         width: 4px; /* Thinner scrollbar */
     }
 
-    .scrollbar-thumb {
+    .custom-scrollbar-body .scrollbar-thumb {
         background-color: rgba(136, 136, 136, 0.5); /* Different color for mobile */
         opacity: 0; /* Start hidden */
         transition: opacity 500ms ease; /* Smooth fade-out */
     }
 
-    .scrollbar-thumb.visible {
+    .custom-scrollbar-body .scrollbar-thumb.visible {
         opacity: 1; /* Show instantly */
         transition: opacity 0s; /* No transition when appearing */
     }

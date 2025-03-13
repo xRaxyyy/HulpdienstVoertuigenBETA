@@ -242,276 +242,266 @@
 
 
 <script>
-// Configuration: Set this to true to allow only one info-group to be open at a time
-const SINGLE_OPEN_MODE = false; // Change to false to allow multiple info-groups to be open
+    // Configuration: Set this to true to allow only one info-group to be open at a time
+    const SINGLE_OPEN_MODE = false; // Change to false to allow multiple info-groups to be open
+    // Minimum height for info-box under 350px width
+    const MIN_INFO_BOX_HEIGHT = 78;
 
-// Minimum height for info-box under 350px width
-const MIN_INFO_BOX_HEIGHT = 78;
-
-// Function to update the height of info-group elements based on the info-box height
-function updateInfoGroupHeight() {
-    document.querySelectorAll('.info-group').forEach(infoGroup => {
-        const infoBox = infoGroup.querySelector('.info-box');
-        if (infoBox) {
-            let infoBoxHeight = infoBox.offsetHeight;
-
-            // Check if the viewport width is less than 350px
-            if (window.innerWidth < 350) {
-                // Enforce a minimum height of 78px for the info-box
-                infoBox.style.minHeight = `${MIN_INFO_BOX_HEIGHT}px`;
-                infoBoxHeight = Math.max(infoBoxHeight, MIN_INFO_BOX_HEIGHT); // Ensure minimum height
-            } else {
-                // Remove min-height if viewport width is >= 350px
-                infoBox.style.minHeight = '';
+    // Function to update the height of info-group elements based on the info-box height
+    function updateInfoGroupHeight() {
+        document.querySelectorAll('.info-group').forEach(infoGroup => {
+            const infoBox = infoGroup.querySelector('.info-box');
+            if (infoBox) {
+                let infoBoxHeight = infoBox.offsetHeight;
+                // Check if the viewport width is less than 350px
+                if (window.innerWidth < 350) {
+                    // Enforce a minimum height of 78px for the info-box
+                    infoBox.style.minHeight = `${MIN_INFO_BOX_HEIGHT}px`;
+                    infoBoxHeight = Math.max(infoBoxHeight, MIN_INFO_BOX_HEIGHT); // Ensure minimum height
+                } else {
+                    // Remove min-height if viewport width is >= 350px
+                    infoBox.style.minHeight = '';
+                }
+                const newHeight = infoBoxHeight + 4; // Add 4px to the height
+                infoGroup.style.height = `${newHeight}px`;
             }
+        });
+    }
 
-            const newHeight = infoBoxHeight + 4; // Add 4px to the height
-            infoGroup.style.height = `${newHeight}px`;
-        }
+    // Add a resize event listener to the window
+    window.addEventListener('resize', () => {
+        updateInfoGroupHeight(); // Update heights on window resize
     });
-}
 
-// Add a resize event listener to the window
-window.addEventListener('resize', () => {
-    updateInfoGroupHeight(); // Update heights on window resize
-});
+    function toggleDetails(button) {
+        const infoGroup = button.closest('.info-group');
+        const details = infoGroup.querySelector('.toggle-section');
+        const toggleBtn = infoGroup.querySelector('.toggle-btn');
 
-function toggleDetails(button) {
-    const infoGroup = button.closest('.info-group');
-    const details = infoGroup.querySelector('.toggle-section');
-    const toggleBtn = infoGroup.querySelector('.toggle-btn');
+        // Get the current height of the .info-box in its collapsed state
+        const infoBox = infoGroup.querySelector('.info-box');
+        let infoBoxHeight = infoBox ? infoBox.offsetHeight : 0;
 
-    // Get the current height of the .info-box in its collapsed state
-    const infoBox = infoGroup.querySelector('.info-box');
-    let infoBoxHeight = infoBox ? infoBox.offsetHeight : 0;
+        // Adjust info-box height if viewport width is less than 350px
+        if (window.innerWidth < 350) {
+            infoBoxHeight = Math.max(infoBoxHeight, MIN_INFO_BOX_HEIGHT); // Ensure minimum height
+        }
 
-    // Adjust info-box height if viewport width is less than 350px
-    if (window.innerWidth < 350) {
-        infoBoxHeight = Math.max(infoBoxHeight, MIN_INFO_BOX_HEIGHT); // Ensure minimum height
-    }
+        let collapsedHeight = infoBoxHeight + 4; // Collapsed height (info-box height + 4px)
 
-    let collapsedHeight = infoBoxHeight + 4; // Collapsed height (info-box height + 4px)
+        // If SINGLE_OPEN_MODE is true, close all other open info-groups
+        if (SINGLE_OPEN_MODE) {
+            document.querySelectorAll('.info-group').forEach((group) => {
+                if (group !== infoGroup && !group.querySelector('.toggle-section').classList.contains('hidden')) {
+                    const otherDetails = group.querySelector('.toggle-section');
+                    const otherToggleBtn = group.querySelector('.toggle-btn');
+                    // Collapse the other info-group
+                    otherDetails.classList.add('hidden');
+                    otherToggleBtn.classList.remove('active');
+                    group.style.height = `${collapsedHeight}px`; // Collapse to the collapsed height
+                    requestAnimationFrame(() => {
+                        group.style.transition = 'height 0.3s ease-out, padding 0.3s ease-out, border 0.3s ease-out';
+                        group.style.height = `${collapsedHeight}px`; // Apply transition
+                        group.style.padding = '0';
+                        group.style.border = '2px solid transparent';
+                    });
+                    // Clean up after transition ends
+                    group.addEventListener('transitionend', () => {
+                        group.style.transition = '';
+                    }, { once: true });
+                }
+            });
+        }
 
-    // If SINGLE_OPEN_MODE is true, close all other open info-groups
-    if (SINGLE_OPEN_MODE) {
-        document.querySelectorAll('.info-group').forEach((group) => {
-            if (group !== infoGroup && !group.querySelector('.toggle-section').classList.contains('hidden')) {
-                const otherDetails = group.querySelector('.toggle-section');
-                const otherToggleBtn = group.querySelector('.toggle-btn');
+        // Toggle the 'hidden' class on the details section
+        const isHidden = details.classList.toggle('hidden');
+        toggleBtn.classList.toggle('active', !isHidden);
 
-                // Collapse the other info-group
-                otherDetails.classList.add('hidden');
-                otherToggleBtn.classList.remove('active');
-                group.style.height = `${collapsedHeight}px`; // Collapse to the collapsed height
-                requestAnimationFrame(() => {
-                    group.style.transition = 'height 0.3s ease-out, padding 0.3s ease-out, border 0.3s ease-out';
-                    group.style.height = `${collapsedHeight}px`; // Apply transition
-                    group.style.padding = '0';
-                    group.style.border = '2px solid transparent';
-                });
-
-                // Clean up after transition ends
-                group.addEventListener('transitionend', () => {
-                    group.style.transition = '';
-                }, { once: true });
-            }
-        });
-    }
-
-    // Toggle the 'hidden' class on the details section
-    const isHidden = details.classList.toggle('hidden');
-    toggleBtn.classList.toggle('active', !isHidden);
-
-    if (isHidden) {
-        // Collapse the infoGroup to the collapsed height
-        const currentHeight = infoGroup.offsetHeight; // Get the current expanded height
-        infoGroup.style.height = `${currentHeight}px`; // Set to current height to prepare for transition
-
-        requestAnimationFrame(() => {
-            infoGroup.style.transition = 'height 0.3s ease-out, padding 0.3s ease-out, border 0.3s ease-out';
-            infoGroup.style.height = `${collapsedHeight}px`; // Transition to collapsed height
-            infoGroup.style.padding = '0';
-            infoGroup.style.border = '2px solid transparent';
-        });
-
-        // Recalculate collapsedHeight after transition ends
-        infoGroup.addEventListener('transitionend', () => {
-            infoGroup.style.transition = ''; // Reset transition after it ends
-            collapsedHeight = infoBox.offsetHeight + 4; // Recalculate collapsed height
-            infoGroup.style.height = `${collapsedHeight}px`; // Ensure correct height is applied
-        }, { once: true });
-    } else {
-        // Expand the infoGroup to its natural content height
-        infoGroup.style.height = 'auto'; // Temporarily set to auto to measure the natural height
-        const expandedHeight = infoGroup.scrollHeight; // Calculate the natural height
-        infoGroup.style.height = `${collapsedHeight}px`; // Reset to collapsed height before transitioning
-
-        requestAnimationFrame(() => {
-            infoGroup.style.transition = 'height 0.3s ease-in, padding 0.3s ease-in, border 0.3s ease-in';
-            infoGroup.style.height = `${expandedHeight}px`; // Start transitioning to the expanded height
-
-            // Defer applying padding and border changes until after the next frame
+        if (isHidden) {
+            // Collapse the infoGroup to the collapsed height
+            const currentHeight = infoGroup.offsetHeight; // Get the current expanded height
+            infoGroup.style.height = `${currentHeight}px`; // Set to current height to prepare for transition
             requestAnimationFrame(() => {
-                infoGroup.style.padding = '10px';
-                infoGroup.style.border = '2px solid #2d7df6';
+                infoGroup.style.transition = 'height 0.3s ease-out, padding 0.3s ease-out, border 0.3s ease-out';
+                infoGroup.style.height = `${collapsedHeight}px`; // Transition to collapsed height
+                infoGroup.style.padding = '0';
+                infoGroup.style.border = '2px solid transparent';
+            });
+            // Recalculate collapsedHeight after transition ends
+            infoGroup.addEventListener('transitionend', () => {
+                infoGroup.style.transition = ''; // Reset transition after it ends
+                collapsedHeight = infoBox.offsetHeight + 4; // Recalculate collapsed height
+                infoGroup.style.height = `${collapsedHeight}px`; // Ensure correct height is applied
+            }, { once: true });
+        } else {
+            // Expand the infoGroup to its natural content height
+            infoGroup.style.height = 'auto'; // Temporarily set to auto to measure the natural height
+            const expandedHeight = infoGroup.scrollHeight; // Calculate the natural height
+            infoGroup.style.height = `${collapsedHeight}px`; // Reset to collapsed height before transitioning
+            requestAnimationFrame(() => {
+                infoGroup.style.transition = 'height 0.3s ease-in, padding 0.3s ease-in, border 0.3s ease-in';
+                infoGroup.style.height = `${expandedHeight}px`; // Start transitioning to the expanded height
+                // Defer applying padding and border changes until after the next frame
+                requestAnimationFrame(() => {
+                    infoGroup.style.padding = '10px';
+                    infoGroup.style.border = '2px solid #2d7df6';
+                });
+            });
+            // Clean up after transition ends
+            infoGroup.addEventListener('transitionend', () => {
+                infoGroup.style.height = 'auto'; // Set back to auto after the transition
+                infoGroup.style.transition = '';
+            }, { once: true });
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const dropdownButtons = document.querySelectorAll('.dropdown-button');
+        const dropdownMenus = document.querySelectorAll('.dropdown-wrapper');
+
+        // Function to close all dropdowns
+        function closeAllDropdowns() {
+            dropdownMenus.forEach(menu => {
+                menu.classList.remove('active');
+                // Remove the event listener when the dropdown is closed
+                document.removeEventListener('touchmove', preventBodyScroll, { passive: false });
+            });
+            dropdownButtons.forEach(button => {
+                button.classList.remove('active');
+            });
+        }
+
+        // Function to prevent body scrolling
+        function preventBodyScroll(e) {
+            const activeDropdown = document.querySelector('.dropdown-wrapper.active');
+            if (activeDropdown) {
+                // Check if the touch event is inside the active dropdown
+                const isInsideDropdown = activeDropdown.contains(e.target);
+                // Prevent scrolling if the touch is outside the dropdown
+                if (!isInsideDropdown) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+            }
+        }
+
+        // Add event listeners to dropdown buttons
+        dropdownButtons.forEach(button => {
+            button.addEventListener('click', function (e) {
+                e.stopPropagation();
+                const menu = this.nextElementSibling;
+                if (menu.classList.contains('active')) {
+                    menu.classList.remove('active');
+                    this.classList.remove('active');
+                    // Remove the event listener when the dropdown is closed
+                    document.removeEventListener('touchmove', preventBodyScroll, { passive: false });
+                } else {
+                    closeAllDropdowns();
+                    menu.classList.add('active');
+                    this.classList.add('active');
+                    // Add the event listener when the dropdown is opened
+                    document.addEventListener('touchmove', preventBodyScroll, { passive: false });
+                }
             });
         });
 
-        // Clean up after transition ends
-        infoGroup.addEventListener('transitionend', () => {
-            infoGroup.style.height = 'auto'; // Set back to auto after the transition
-            infoGroup.style.transition = '';
-        }, { once: true });
-    }
-}
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function (e) {
+            if (!e.target.closest('.dropdown')) {
+                closeAllDropdowns();
+            }
+        });
 
-document.addEventListener('DOMContentLoaded', function () {
-    const dropdownButtons = document.querySelectorAll('.dropdown-button');
-    const dropdownMenus = document.querySelectorAll('.dropdown-wrapper');
-    const searchInput = document.getElementById('search-input'); // Get the input field
-
-    // Function to close all dropdowns
-    function closeAllDropdowns() {
+        // Add event listeners to dropdown menu items
         dropdownMenus.forEach(menu => {
-            menu.classList.remove('active');
+            menu.addEventListener('click', function (e) {
+                if (e.target.tagName === 'LI') {
+                    const button = this.previousElementSibling;
+                    // Preserve the icon while updating the text
+                    button.innerHTML = `${e.target.textContent} <i class="fa fa-chevron-down"></i>`;
+                    closeAllDropdowns();
+                }
+            });
         });
-        dropdownButtons.forEach(button => {
-            button.classList.remove('active');
+
+        // Initialize scrollbar for both dropdowns
+        initializeScrollbars();
+    });
+
+    function initializeScrollbars() {
+        document.querySelectorAll('.dropdown-wrapper').forEach(dropdownWrapper => {
+            const dropdownMenu = dropdownWrapper.querySelector('.dropdown-menu');
+            const scrollbarThumb = dropdownWrapper.querySelector('.scrollbar-thumb');
+            const customScrollbar = dropdownWrapper.querySelector('.custom-scrollbar');
+            let isDragging = false;
+
+            // Update scrollbar thumb height based on content
+            function updateScrollbarThumb() {
+                const menuHeight = dropdownMenu.clientHeight;
+                const menuScrollHeight = dropdownMenu.scrollHeight;
+                // Calculate the thumb height as a percentage of the visible area
+                const thumbHeight = (menuHeight / menuScrollHeight) * menuHeight;
+                // Ensure the thumb has a minimum height (e.g., 20px) for usability
+                const minThumbHeight = 20;
+                scrollbarThumb.style.height = `${Math.max(thumbHeight, minThumbHeight)}px`;
+            }
+
+            // Update scrollbar thumb position on scroll
+            dropdownMenu.addEventListener("scroll", () => {
+                const scrollTop = dropdownMenu.scrollTop;
+                const maxScrollTop = dropdownMenu.scrollHeight - dropdownMenu.clientHeight;
+                // Calculate the thumb position based on the scroll progress
+                const thumbPosition = (scrollTop / maxScrollTop) * (customScrollbar.clientHeight - scrollbarThumb.clientHeight);
+                scrollbarThumb.style.top = `${thumbPosition}px`;
+            });
+
+            // Drag functionality for scrollbar thumb
+            scrollbarThumb.addEventListener("mousedown", (e) => {
+                isDragging = true;
+                document.body.style.userSelect = "none";
+                document.body.style.pointerEvents = "none";
+                scrollbarThumb.style.pointerEvents = "none";
+                const initialY = e.clientY;
+                const initialThumbPosition = parseFloat(scrollbarThumb.style.top || 0);
+
+                function drag(e) {
+                    if (!isDragging) return;
+                    const deltaY = e.clientY - initialY;
+                    const newThumbPosition = initialThumbPosition + deltaY;
+                    const maxThumbPosition = customScrollbar.clientHeight - scrollbarThumb.clientHeight;
+                    const clampedPosition = Math.min(Math.max(newThumbPosition, 0), maxThumbPosition);
+                    scrollbarThumb.style.top = `${clampedPosition}px`;
+                    // Calculate the scroll position based on the thumb position
+                    const scrollTop = (clampedPosition / maxThumbPosition) * (dropdownMenu.scrollHeight - dropdownMenu.clientHeight);
+                    dropdownMenu.scrollTop = scrollTop;
+                }
+
+                function stopDrag() {
+                    isDragging = false;
+                    document.body.style.userSelect = "";
+                    scrollbarThumb.style.pointerEvents = "";
+                    document.body.style.pointerEvents = "";
+                    document.removeEventListener("mousemove", drag);
+                    document.removeEventListener("mouseup", stopDrag);
+                }
+
+                document.addEventListener("mousemove", drag);
+                document.addEventListener("mouseup", stopDrag);
+            });
+
+            // Initialize scrollbar thumb height
+            updateScrollbarThumb();
+
+            // Update scrollbar thumb height when the dropdown content changes
+            new MutationObserver(updateScrollbarThumb).observe(dropdownMenu, {
+                childList: true,
+                subtree: true,
+            });
         });
     }
 
-    // Function to reset scroll position to the top
-    function resetScrollPosition(menu) {
-        const dropdownMenu = menu.querySelector('.dropdown-menu');
-        if (dropdownMenu) {
-            dropdownMenu.scrollTop = 0; // Reset scroll position to the top
-        }
+    function updAndClear() {
+        count = 100;
+        debouncedUpdateList(true);
     }
-
-    // Add event listeners to dropdown buttons
-    dropdownButtons.forEach(button => {
-        button.addEventListener('click', function (e) {
-            e.stopPropagation();
-            const menu = this.nextElementSibling;
-
-            if (menu.classList.contains('active')) {
-                menu.classList.remove('active');
-                this.classList.remove('active');
-            } else {
-                closeAllDropdowns();
-                menu.classList.add('active');
-                this.classList.add('active');
-                resetScrollPosition(menu); // Reset scroll position when dropdown is opened
-            }
-        });
-    });
-
-    // Close dropdowns when clicking outside
-    document.addEventListener('click', function (e) {
-        if (!e.target.closest('.dropdown')) {
-            closeAllDropdowns();
-        }
-    });
-
-    // Add event listeners to dropdown menu items
-    dropdownMenus.forEach(menu => {
-        menu.addEventListener('click', function (e) {
-            if (e.target.tagName === 'LI') {
-                const button = this.previousElementSibling;
-                // Preserve the icon while updating the text
-                button.innerHTML = `${e.target.textContent} <i class="fa fa-chevron-down"></i>`;
-                closeAllDropdowns();
-            }
-        });
-    });
-
-    // Initialize scrollbar for both dropdowns
-    initializeScrollbars();
-});
-
-function initializeScrollbars() {
-    document.querySelectorAll('.dropdown-wrapper').forEach(dropdownWrapper => {
-        const dropdownMenu = dropdownWrapper.querySelector('.dropdown-menu');
-        const scrollbarThumb = dropdownWrapper.querySelector('.scrollbar-thumb');
-        const customScrollbar = dropdownWrapper.querySelector('.custom-scrollbar');
-
-        let isDragging = false;
-
-        // Update scrollbar thumb height based on content
-        function updateScrollbarThumb() {
-            const menuHeight = dropdownMenu.clientHeight;
-            const menuScrollHeight = dropdownMenu.scrollHeight;
-
-            // Calculate the thumb height as a percentage of the visible area
-            const thumbHeight = (menuHeight / menuScrollHeight) * menuHeight;
-
-            // Ensure the thumb has a minimum height (e.g., 20px) for usability
-            const minThumbHeight = 20;
-            scrollbarThumb.style.height = `${Math.max(thumbHeight, minThumbHeight)}px`;
-        }
-
-        // Update scrollbar thumb position on scroll
-        dropdownMenu.addEventListener("scroll", () => {
-            const scrollTop = dropdownMenu.scrollTop;
-            const maxScrollTop = dropdownMenu.scrollHeight - dropdownMenu.clientHeight;
-
-            // Calculate the thumb position based on the scroll progress
-            const thumbPosition = (scrollTop / maxScrollTop) * (customScrollbar.clientHeight - scrollbarThumb.clientHeight);
-            scrollbarThumb.style.top = `${thumbPosition}px`;
-        });
-
-        // Drag functionality for scrollbar thumb
-        scrollbarThumb.addEventListener("mousedown", (e) => {
-            isDragging = true;
-            document.body.style.userSelect = "none";
-            document.body.style.pointerEvents = "none";
-            scrollbarThumb.style.pointerEvents = "none";
-
-            const initialY = e.clientY;
-            const initialThumbPosition = parseFloat(scrollbarThumb.style.top || 0);
-
-            function drag(e) {
-                if (!isDragging) return;
-
-                const deltaY = e.clientY - initialY;
-                const newThumbPosition = initialThumbPosition + deltaY;
-
-                const maxThumbPosition = customScrollbar.clientHeight - scrollbarThumb.clientHeight;
-                const clampedPosition = Math.min(Math.max(newThumbPosition, 0), maxThumbPosition);
-
-                scrollbarThumb.style.top = `${clampedPosition}px`;
-
-                // Calculate the scroll position based on the thumb position
-                const scrollTop = (clampedPosition / maxThumbPosition) * (dropdownMenu.scrollHeight - dropdownMenu.clientHeight);
-                dropdownMenu.scrollTop = scrollTop;
-            }
-
-            function stopDrag() {
-                isDragging = false;
-                document.body.style.userSelect = "";
-                scrollbarThumb.style.pointerEvents = "";
-                document.body.style.pointerEvents = "";
-                document.removeEventListener("mousemove", drag);
-                document.removeEventListener("mouseup", stopDrag);
-            }
-
-            document.addEventListener("mousemove", drag);
-            document.addEventListener("mouseup", stopDrag);
-        });
-
-        // Initialize scrollbar thumb height
-        updateScrollbarThumb();
-
-        // Update scrollbar thumb height when the dropdown content changes
-        new MutationObserver(updateScrollbarThumb).observe(dropdownMenu, {
-            childList: true,
-            subtree: true,
-        });
-    });
-}
-
-function updAndClear() {
-    count = 100;
-    debouncedUpdateList(true);
-}
 </script>
