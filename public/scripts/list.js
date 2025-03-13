@@ -159,14 +159,9 @@ function populateDropdown(dropdownButton, dropdownData) {
 }
 
 function filterRegioDropdown(hulpdienstValue) {
-
     const regioDropdownButton = document.getElementById('regio-dropdown');
     const regioDropdownMenu = regioDropdownButton.nextElementSibling.querySelector('.dropdown-menu');
     regioDropdownMenu.innerHTML = ''; // Clear existing options
-
-    // Reset region dropdown to "All"
-    regioDropdownButton.innerHTML = `Alle Regio's <i class="fa fa-chevron-down"></i>`;
-    regioDropdownButton.setAttribute('data-value', 'all');
 
     // Determine which dropdown data to use based on the URL
     const dropdownData = window.location.search.includes('NL') ? NLDropdown : BEDropdown;
@@ -193,7 +188,7 @@ function filterRegioDropdown(hulpdienstValue) {
     populateDropdown(regioDropdownButton, filteredRegions);
 
     // Initialize the custom dropdown functionality
-    initializeCustomDropdown(regioDropdownButton, updAndClear);
+    initializeCustomDropdown(regioDropdownButton, debouncedUpdateList);
 }
 
 
@@ -203,13 +198,13 @@ function updateHulpdienstDropdown(regioValue) {
     if (regioValue && regioValue.includes('(Politie)')) {
         hulpdienstDropdownButton.innerHTML = `Politie <i class="fa fa-chevron-down"></i>`;
         hulpdienstDropdownButton.setAttribute('data-value', 'Politie');
+        filterRegioDropdown('Politie'); // Filter regions to show only Politie options
     } else if (regioValue && regioValue.includes('(RWS)')) {
         hulpdienstDropdownButton.innerHTML = `Rijkswaterstaat <i class="fa fa-chevron-down"></i>`;
         hulpdienstDropdownButton.setAttribute('data-value', 'Rijkswaterstaat');
-    } else {
-        hulpdienstDropdownButton.innerHTML = `Alle Hulpdiensten <i class="fa fa-chevron-down"></i>`;
-        hulpdienstDropdownButton.setAttribute('data-value', 'all');
+        filterRegioDropdown('Rijkswaterstaat'); // Filter regions to show only RWS options
     }
+    // Do nothing if the region does not include "(Politie)" or "(RWS)"
 }
 
 function initializeCustomDropdown(dropdownButton, callback) {
@@ -231,18 +226,22 @@ function initializeCustomDropdown(dropdownButton, callback) {
             dropdownButton.innerHTML = `${item.textContent} <i class="fa fa-chevron-down"></i>`;
             dropdownButton.setAttribute('data-value', item.getAttribute('value'));
 
-
             dropdownMenu.classList.remove('visible');
 
             if (dropdownButton.id === 'regio-dropdown') {
-                updateHulpdienstDropdown(item.textContent); // Update hulpdienst based on selected region
+                const regioValue = item.textContent;
+                if (regioValue.includes('(Politie)') || regioValue.includes('(RWS)')) {
+                    updateHulpdienstDropdown(regioValue); // Update hulpdienst based on selected region
+                }
             }
 
             if (dropdownButton.id === 'hulpdienst-dropdown') {
                 const hulpdienstValue = item.getAttribute('value');
-
-                // Always trigger the region dropdown update
-                filterRegioDropdown(hulpdienstValue);
+                // Reset regio dropdown to "All" when hulpdienst changes
+                const regioDropdownButton = document.getElementById('regio-dropdown');
+                regioDropdownButton.innerHTML = `Alle Regio's <i class="fa fa-chevron-down"></i>`;
+                regioDropdownButton.setAttribute('data-value', 'all');
+                filterRegioDropdown(hulpdienstValue); // Filter regions based on selected hulpdienst
             }
 
             callback();
