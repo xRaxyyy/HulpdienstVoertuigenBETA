@@ -3,61 +3,60 @@ document.addEventListener('DOMContentLoaded', () => {
     const scrollbarThumb = document.querySelector('.custom-scrollbar-body .scrollbar-thumb');
     const scrollableWrapper = document.querySelector('.scroll-container');
 
-    // Minimum height for the scrollbar thumb
-    const MIN_THUMB_HEIGHT = 30; // You can adjust this value as needed
+    const MIN_THUMB_HEIGHT = 30;
+    let isDragging = false;
+    let isMobile = window.innerWidth <= 1024;
+    let scrollTimeout;
 
-    // Function to update the scrollbar thumb
     function updateScrollbar() {
         if (!scrollableContent || !scrollbarThumb || !scrollableWrapper) return;
-    
-        // Calculate heights
+
         const contentHeight = scrollableContent.scrollHeight;
         const wrapperHeight = scrollableWrapper.clientHeight;
-    
-        // Ensure heights are valid
+
         if (contentHeight <= 0 || wrapperHeight <= 0) return;
-    
-        // Hide scrollbar if there's nothing to scroll
+
         if (contentHeight <= wrapperHeight) {
             scrollbarThumb.style.display = 'none';
-            return; // Exit the function early since there's no need to update the scrollbar
+            return;
         } else {
-            scrollbarThumb.style.display = 'block'; // Or whatever display value you use in your CSS
+            scrollbarThumb.style.display = 'block';
         }
-    
-        // Calculate thumb height
+
         let thumbHeight = (wrapperHeight / contentHeight) * wrapperHeight;
-    
-        // Enforce minimum thumb height
         thumbHeight = Math.max(thumbHeight, MIN_THUMB_HEIGHT);
-    
         scrollbarThumb.style.height = `${thumbHeight}px`;
-    
-        // Calculate thumb position
+
         const scrollTop = scrollableContent.scrollTop;
         const maxScrollTop = contentHeight - wrapperHeight;
         const thumbPosition = (scrollTop / maxScrollTop) * (wrapperHeight - thumbHeight);
-    
+
         scrollbarThumb.style.top = `${thumbPosition}px`;
+
+        if (isMobile) {
+            scrollbarThumb.classList.add('visible');
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+                scrollbarThumb.classList.remove('visible');
+            }, 400); // Hide scrollbar after 1 second of inactivity
+        }
     }
 
-    // Update scrollbar on scroll
     scrollableContent.addEventListener('scroll', updateScrollbar);
+    window.addEventListener('resize', () => {
+        isMobile = window.innerWidth <= 1024;
+        updateScrollbar();
+    });
 
-    // Update scrollbar on window resize
-    window.addEventListener('resize', updateScrollbar);
-
-    // Initial update
     updateScrollbar();
 
-    // Drag functionality for the scrollbar thumb
-    let isDragging = false;
-
     scrollbarThumb.addEventListener('mousedown', (e) => {
+        if (isMobile) return; // Prevent drag on mobile
+
         isDragging = true;
-        document.body.style.userSelect = 'none'; // Prevent text selection
-        document.body.style.pointerEvents = 'none'
-        scrollbarThumb.style.pointerEvents = 'none'; // Prevent interaction with the scrollbar itself
+        document.body.style.userSelect = 'none';
+        document.body.style.pointerEvents = 'none';
+        scrollbarThumb.style.pointerEvents = 'none';
 
         const initialY = e.clientY;
         const initialThumbPosition = parseFloat(scrollbarThumb.style.top || 0);
@@ -67,13 +66,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const deltaY = e.clientY - initialY;
             const newThumbPosition = initialThumbPosition + deltaY;
-
             const wrapperHeight = scrollableWrapper.clientHeight;
             const thumbHeight = parseFloat(scrollbarThumb.style.height || 0);
             const maxThumbPosition = wrapperHeight - thumbHeight;
 
             const clampedPosition = Math.min(Math.max(newThumbPosition, 0), maxThumbPosition);
-
             scrollbarThumb.style.top = `${clampedPosition}px`;
 
             const scrollTop = (clampedPosition / maxThumbPosition) * (scrollableContent.scrollHeight - scrollableContent.clientHeight);
@@ -82,9 +79,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         function stopDrag() {
             isDragging = false;
-            document.body.style.userSelect = ''; // Restore text selection
-            scrollbarThumb.style.pointerEvents = ''; // Restore interaction with the scrollbar
-            document.body.style.pointerEvents = ''
+            document.body.style.userSelect = '';
+            scrollbarThumb.style.pointerEvents = '';
+            document.body.style.pointerEvents = '';
             document.removeEventListener('mousemove', drag);
             document.removeEventListener('mouseup', stopDrag);
         }
@@ -93,6 +90,24 @@ document.addEventListener('DOMContentLoaded', () => {
         document.addEventListener('mouseup', stopDrag);
     });
 
-    // Make the updateScrollbar function globally accessible
+    // Touch scrolling for mobile
+    let touchStartY = 0;
+    let scrollStartY = 0;
+
+    scrollableContent.addEventListener('touchstart', (e) => {
+        if (!isMobile) return;
+
+        touchStartY = e.touches[0].clientY;
+        scrollStartY = scrollableContent.scrollTop;
+    });
+
+    scrollableContent.addEventListener('touchmove', (e) => {
+        if (!isMobile) return;
+
+        const touchY = e.touches[0].clientY;
+        const deltaY = touchY - touchStartY;
+        scrollableContent.scrollTop = scrollStartY - deltaY;
+    });
+
     window.updateScrollbar = updateScrollbar;
 });

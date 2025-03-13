@@ -361,7 +361,6 @@ const debouncedUpdateList = debounce(() => {
 }, 50);
 
 function generateVisibleRows(dataset, amount, shouldClear = false) {
-    console.log(shouldClear)
     const containersHolder = document.getElementById('containers-holder');
 
     if (shouldClear) {
@@ -382,10 +381,6 @@ function generateVisibleRows(dataset, amount, shouldClear = false) {
     let currentAddress = '';
     let currentContainer = null;
     let renderedCount = 0;
-    
-    console.log('yes')
-
-    console.log(dataset.length)
 
     for (let i = offset; i < dataset.length; i++) {
         const row = dataset[i];

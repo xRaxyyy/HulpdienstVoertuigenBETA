@@ -93,12 +93,30 @@ body {
     border-radius: 5px; /* Rounded corners */
     pointer-events: auto; /* Allow dragging */
     z-index: 1001; /* Ensure it's above the scrollbar track */
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, opacity 0.3s ease;
 }
 
 .scrollbar-thumb:hover,
 .scrollbar-thumb:active {
     background-color: var(--accent-color);
+}
+
+/* Mobile Scrollbar Styles */
+@media (max-width: 1024px) {
+    .custom-scrollbar-body {
+        width: 4px; /* Thinner scrollbar */
+    }
+
+    .scrollbar-thumb {
+        background-color: rgba(136, 136, 136, 0.5); /* Different color for mobile */
+        opacity: 0; /* Start hidden */
+        transition: opacity 500ms ease; /* Smooth fade-out */
+    }
+
+    .scrollbar-thumb.visible {
+        opacity: 1; /* Show instantly */
+        transition: opacity 0s; /* No transition when appearing */
+    }
 }
 
 
@@ -1874,28 +1892,5 @@ transform: translateY(-2px);
 
     .about-container {
         padding: 1rem;
-    }
-}
-
-@media (max-width: 1024px) { /* Adjust breakpoint as needed */
-    .scroll-content {
-        scrollbar-width: auto; /* Firefox default scrollbar */
-        overflow-y: auto; /* Show default scrollbar */
-    }
-
-    ::-webkit-scrollbar {
-        display: block; /* Show WebKit scrollbar */
-        width: 7px;
-    }
-
-    ::-webkit-scrollbar-thumb {
-        background-color: #555;
-        border-radius: 5px;
-    }
-
-    /* Hide custom scrollbar on small screens */
-    .custom-scrollbar,
-    .custom-scrollbar-body {
-        display: none;
     }
 }
