@@ -326,7 +326,8 @@ function updateList(shouldClear = true) {
     }
 
     if (filteredData.length === 0) {
-        if (query === '') {
+        // Check if the service is selected and no matches are found
+        if (service !== 'all' && query === '' && region === 'all') {
             const noMatchDiv = document.createElement('div');
             noMatchDiv.className = 'container';
             const header = document.createElement('div');
@@ -335,6 +336,7 @@ function updateList(shouldClear = true) {
             noMatchDiv.appendChild(header);
             containersHolder.appendChild(noMatchDiv);
         } else {
+            // No matches found due to region or search query
             const noMatchDiv = document.createElement('div');
             noMatchDiv.textContent = 'Geen overeenkomsten gevonden.';
             noMatchDiv.style.textAlign = 'center';
